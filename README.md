@@ -1,4 +1,4 @@
-LinkedIn Post Scraper (Python + Selenium + Flask)
+## LinkedIn Post Scraper (Python + Selenium + Flask)
 
 A browser automation tool that scrapes detailed posts from LinkedIn based on keyword, date range, and post type. It works both via **command-line (CLI)** and a **web interface (Flask)**.
 
