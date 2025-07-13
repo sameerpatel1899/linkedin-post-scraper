@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>LinkedIn Post Scraper</title>
+</head>
+<body>
+    <h2>LinkedIn Post Scraper</h2>
+    <form method="POST">
+        <input name="keyword" placeholder="Keyword or hashtag"><br>
+        <input type="date" name="start_date"><br>
+        <input type="date" name="end_date"><br>
+        <select name="post_type">
+            <option value="text">Text</option>
+            <option value="image">Image</option>
+            <option value="video">Video</option>
+            <option value="poll">Poll</option>
+        </select><br>
+        <button type="submit">Scrape</button>
+    </form>
+
+    {% if data %}
+        <h3>Results:</h3>
+        <ul>
+        {% for post in data %}
+            <li>{{ post["author"] }} - {{ post["content"][:100] }}...</li>
+        {% endfor %}
+        </ul>
+    {% endif %}
+</body>
+</html>
+{% if error %}
+    <h3 style="color: red;">Error: {{ error }}</h3>
+{% endif %}
