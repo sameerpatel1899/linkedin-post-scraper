@@ -1,33 +1,141 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
     <title>LinkedIn Post Scraper</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f8f9fa;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            min-height: 100vh;
+            padding: 40px 20px;
+        }
+
+        h1 {
+            font-weight: 600;
+            color: #202124;
+            margin-bottom: 30px;
+        }
+
+        form {
+            background: #fff;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+            width: 100%;
+            max-width: 480px;
+        }
+
+        input[type="text"],
+        input[type="date"],
+        select {
+            width: 100%;
+            padding: 12px 14px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            font-size: 16px;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            background-color: #1a73e8;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #1669c1;
+        }
+
+        .loading {
+            margin-top: 15px;
+            font-size: 14px;
+            color: #666;
+        }
+
+        .post {
+            background: #fff;
+            padding: 16px;
+            margin-top: 12px;
+            border-radius: 6px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+            max-width: 600px;
+            text-align: left;
+        }
+
+        .post p {
+            margin: 0;
+            font-size: 15px;
+            color: #202124;
+            white-space: pre-wrap;
+        }
+
+        .error {
+            color: red;
+            margin-top: 20px;
+            font-size: 14px;
+        }
+
+        .success-count {
+            margin-top: 20px;
+            font-weight: 500;
+            font-size: 15px;
+            color: green;
+        }
+    </style>
+
+    <script>
+        function showLoading() {
+            document.getElementById("loading").style.display = "block";
+        }
+    </script>
 </head>
 <body>
-    <h2>LinkedIn Post Scraper</h2>
-    <form method="POST">
-        <input name="keyword" placeholder="Keyword or hashtag"><br>
-        <input type="date" name="start_date"><br>
-        <input type="date" name="end_date"><br>
-        <select name="post_type">
+
+    <h1>LinkedIn Post Scraper</h1>
+
+    <form method="POST" onsubmit="showLoading()">
+        <input type="text" name="keyword" placeholder="Keyword or hashtag (e.g. hiring)" required>
+        <input type="date" name="start_date" required>
+        <input type="date" name="end_date" required>
+
+        <select name="post_type" required>
+            <option value="" disabled selected>Select post type</option>
             <option value="text">Text</option>
             <option value="image">Image</option>
             <option value="video">Video</option>
             <option value="poll">Poll</option>
-        </select><br>
-        <button type="submit">Scrape</button>
+        </select>
+
+        <button type="submit">Scrape Posts</button>
+
+        <div id="loading" class="loading" style="display: none;">
+            Scraping in progress... Please wait ⏳
+        </div>
     </form>
 
-    {% if data %}
-        <h3>Results:</h3>
-        <ul>
-        {% for post in data %}
-            <li>{{ post["author"] }} - {{ post["content"][:100] }}...</li>
-        {% endfor %}
-        </ul>
+    {% if error %}
+        <div class="error">Error: {{ error }}</div>
     {% endif %}
+
+    {% if data %}
+        <div class="success-count">{{ data|length }} posts found:</div>
+        {% for post in data %}
+            <div class="post">
+                <p>{{ post["content"][:500] }}...</p>
+            </div>
+        {% endfor %}
+    {% endif %}
+
 </body>
 </html>
-{% if error %}
-    <h3 style="color: red;">Error: {{ error }}</h3>
-{% endif %}
